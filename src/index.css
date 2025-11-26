@@ -2,5 +2,32 @@
 
 @theme {
   --font-sans: "Inter", sans-serif;
-  --color-playr-primary: #ff4500;
+
+  /* Colors */
+  --color-bg: #171717;
+  /* neutral-900 */
+  --color-surface: #262626;
+  /* neutral-800 */
+  --color-surface-hover: #404040;
+  /* neutral-700 */
+
+  --color-primary: #9333ea;
+  /* purple-600 */
+  --color-primary-hover: #7e22ce;
+  /* purple-700 */
+  --color-accent: #c084fc;
+  /* purple-400 */
+
+  --color-text: #ffffff;
+  --color-text-muted: #9ca3af;
+  /* gray-400 */
+
+  --color-success: #22c55e;
+  /* green-500 */
+  --color-error: #ef4444;
+  /* red-500 */
+  --color-warning: #eab308;
+  /* yellow-500 */
+  --color-info: #3b82f6;
+  /* blue-500 */
 }

@@ -6,7 +6,9 @@ interface MobileControllerProps {
 export default function MobileController(props: MobileControllerProps) {
     return (
         <>
-            {props.roomCode}
+            <div className="text-xl">
+                {props.roomCode}
+            </div>
         </>
     );
 }

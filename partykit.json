@@ -1,0 +1,8 @@
+{
+    "name": "playr-trivia",
+    "main": "party/main.ts",
+    "parties": {
+        "trivia": "party/trivia.ts"
+    },
+    "compatibilityDate": "2025-02-25"
+}

@@ -30,3 +30,6 @@ bun.lock
 playr-trivia.iml
 
 node_modules/*
+.env
+
+.partykit/*
