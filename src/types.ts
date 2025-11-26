@@ -4,6 +4,7 @@ export interface Player {
     id: string;
     name: string;
     score: number;
+    hasAnswered?: boolean;
 }
 
 export interface Question {
@@ -26,8 +27,11 @@ export type ClientMessage =
     | { type: "answer"; questionIndex: number; answerIndex: number }
     | { type: "start_game"; questions: Question[] }
     | { type: "next_question" }
-    | { type: "show_results" };
+    | { type: "show_results" }
+    | { type: "identify_host" }
+    | { type: "restart" };
 
 export type ServerMessage =
     | { type: "sync"; data: GameData }
-    | { type: "error"; message: string };
+    | { type: "error"; message: string }
+    | { type: "game_terminated" };

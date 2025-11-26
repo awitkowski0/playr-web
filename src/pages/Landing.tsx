@@ -8,8 +8,17 @@ export default function Landing() {
     const [gameId, setGameId] = useState("");
     const [, setLocation] = useLocation();
 
+    // Load nickname from local storage
+    useState(() => {
+        const savedName = localStorage.getItem("playr_nickname");
+        if (savedName) {
+            setName(savedName);
+        }
+    });
+
     const handleJoin = () => {
         if (name && gameId) {
+            localStorage.setItem("playr_nickname", name);
             setLocation(`/game?room=${gameId}&name=${encodeURIComponent(name)}`);
         }
     };

@@ -3,11 +3,12 @@ import usePartySocket from "partysocket/react";
 import { motion, AnimatePresence } from "motion/react";
 import type { GameData, ServerMessage } from "../../types";
 import clsx from "clsx";
-import { useSearch, Link } from "wouter";
+import { useSearch, Link, useLocation } from "wouter";
 
 const PARTYKIT_HOST = "localhost:1999"; // Default local dev port
 
 export default function Game() {
+    const [, setLocation] = useLocation();
     const search = useSearch();
     const params = new URLSearchParams(search);
     const room = params.get("room") || "my-room";
@@ -26,6 +27,8 @@ export default function Game() {
             const message = JSON.parse(event.data) as ServerMessage;
             if (message.type === "sync") {
                 setGameData(message.data);
+            } else if (message.type === "game_terminated") {
+                setLocation("/");
             }
         },
     });
@@ -113,6 +116,14 @@ export default function Game() {
                         exit={{ opacity: 0 }}
                         className="w-full max-w-md"
                     >
+                        <div className="w-full h-2 bg-surface rounded-full mb-6 overflow-hidden">
+                            <motion.div
+                                className="h-full bg-primary"
+                                initial={{ width: "100%" }}
+                                animate={{ width: `${(gameData.timeLeft / 30) * 100}%` }}
+                                transition={{ duration: 1, ease: "linear" }}
+                            />
+                        </div>
                         {/* Player usually just sees shapes/colors, but we'll show text for now or just buttons */}
                         <div className="grid grid-cols-2 gap-4 h-64">
                             {["red", "blue", "yellow", "green"].map((color, idx) => (
@@ -146,10 +157,13 @@ export default function Game() {
                         animate={{ scale: 1, opacity: 1 }}
                         className="text-center"
                     >
-                        {/* We don't know if we were correct locally easily without more logic, 
-                    but we can show score or just "Look at the screen" */}
+                        {gameData.state === "result" && (
+                            <div className="mb-4 text-xl font-bold text-text-muted">
+                                Next question in {gameData.timeLeft}s
+                            </div>
+                        )}
+
                         <h2 className="text-3xl font-bold mb-4">Time's Up!</h2>
-                        <p>Check the host screen for results.</p>
                         <div className="mt-8 p-4 bg-surface rounded-lg">
                             <span className="text-text-muted">Your Score</span>
                             <div className="text-4xl font-bold text-accent">

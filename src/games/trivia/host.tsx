@@ -36,6 +36,9 @@ export default function Host() {
         host: PARTYKIT_HOST,
         room: "my-room",
         party: "trivia",
+        onOpen() {
+            socket.send(JSON.stringify({ type: "identify_host" }));
+        },
         onMessage(event) {
             const message = JSON.parse(event.data) as ServerMessage;
             if (message.type === "sync") {
@@ -61,7 +64,7 @@ export default function Host() {
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-bg text-text p-8 overflow-hidden relative">
             <div className="absolute top-4 left-4 flex items-center gap-4">
-                <Link href="/host">
+                <Link href="~/host">
                     <button className="px-4 py-2 bg-surface rounded hover:bg-surface-hover transition font-bold text-sm">
                         Quit Game
                     </button>
@@ -116,7 +119,18 @@ export default function Host() {
                     >
                         <div className="flex justify-between items-center mb-8">
                             <div className="text-2xl text-text-muted">Question {gameData.currentQuestionIndex + 1} / {gameData.questions.length}</div>
-                            <div className="text-4xl font-bold text-accent">{gameData.timeLeft}s</div>
+                            <motion.div
+                                key={gameData.timeLeft}
+                                initial={{ scale: 1.2, opacity: 0.8 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className={clsx(
+                                    "text-4xl font-bold",
+                                    gameData.timeLeft > 10 ? "text-accent" :
+                                        gameData.timeLeft > 5 ? "text-warning" : "text-error"
+                                )}
+                            >
+                                {gameData.timeLeft}s
+                            </motion.div>
                         </div>
 
                         <h2 className="text-5xl font-bold mb-12 text-center leading-tight">
@@ -160,6 +174,12 @@ export default function Host() {
                         exit={{ opacity: 0 }}
                         className="w-full max-w-6xl text-center"
                     >
+                        <div className="flex justify-end mb-4">
+                            <div className="text-2xl font-bold text-text-muted">
+                                Next question in {gameData.timeLeft}s
+                            </div>
+                        </div>
+
                         <h2 className="text-5xl font-bold mb-8">Correct Answer</h2>
                         <div className="text-4xl mb-12 text-success font-bold">
                             {gameData.questions[gameData.currentQuestionIndex].options[gameData.questions[gameData.currentQuestionIndex].correctAnswer]}
